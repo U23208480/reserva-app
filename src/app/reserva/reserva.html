@@ -4,14 +4,32 @@
   <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
     <label for="nombre">Nombre completo</label>
     <input id="nombre" type="text" formControlName="nombre" />
+    @if (form.controls.nombre.touched && form.controls.nombre.hasError('required')) {
+      <small class="error">El nombre es obligatorio.</small>
+    }
+    @if (form.controls.nombre.touched && form.controls.nombre.hasError('minlength')) {
+      <small class="error">El nombre debe tener al menos 3 caracteres.</small>
+    }
 
     <label for="correo">Correo electrónico</label>
     <input id="correo" type="email" formControlName="correo" />
+    @if (form.controls.correo.touched && form.controls.correo.hasError('required')) {
+      <small class="error">El correo es obligatorio.</small>
+    }
+    @if (form.controls.correo.touched && form.controls.correo.hasError('email')) {
+      <small class="error">Ingrese un correo válido.</small>
+    }
 
     <label for="noches">Número de noches</label>
     <input id="noches" type="number" formControlName="noches" />
+    @if (form.controls.noches.touched && form.controls.noches.hasError('required')) {
+      <small class="error">El número de noches es obligatorio.</small>
+    }
+    @if (form.controls.noches.touched && (form.controls.noches.hasError('min') || form.controls.noches.hasError('max'))) {
+      <small class="error">La reserva debe ser de 1 a 15 noches.</small>
+    }
 
-    <button type="submit">Reservar</button>
+    <button type="submit" [disabled]="form.invalid">Reservar</button>
   </form>
 
   @if (enviado()) {
