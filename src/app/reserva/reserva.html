@@ -1,39 +1,67 @@
-<main class="contenedor">
-  <h1>Reserva de habitación</h1>
-  <p class="subtitulo">Complete sus datos para registrar su reserva.</p>
+<main class="pagina">
+  <section class="tarjeta">
+    <aside class="panel">
+      <span class="etiqueta">Hospedaje</span>
+      <h2>Tu descanso empieza aquí</h2>
+      <p>Reserva tu habitación en pocos pasos y recibe la confirmación al instante.</p>
+      <ul class="beneficios">
+        <li>Confirmación inmediata</li>
+        <li>Estadías de 1 a 15 noches</li>
+        <li>Atención las 24 horas</li>
+      </ul>
+    </aside>
 
-  <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
-    <label for="nombre">Nombre completo</label>
-    <input id="nombre" type="text" formControlName="nombre" />
-    @if (form.controls.nombre.touched && form.controls.nombre.hasError('required')) {
-      <small class="error">El nombre es obligatorio.</small>
-    }
-    @if (form.controls.nombre.touched && form.controls.nombre.hasError('minlength')) {
-      <small class="error">El nombre debe tener al menos 3 caracteres.</small>
-    }
+    <div class="contenido">
+      <h1>Reserva de habitación</h1>
+      <p class="subtitulo">Complete sus datos para registrar su reserva.</p>
 
-    <label for="correo">Correo electrónico</label>
-    <input id="correo" type="email" formControlName="correo" />
-    @if (form.controls.correo.touched && form.controls.correo.hasError('required')) {
-      <small class="error">El correo es obligatorio.</small>
-    }
-    @if (form.controls.correo.touched && form.controls.correo.hasError('email')) {
-      <small class="error">Ingrese un correo válido.</small>
-    }
+      <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+        <div class="campo">
+          <label for="nombre">Nombre completo</label>
+          <input id="nombre" type="text" formControlName="nombre" placeholder="Ej. María Pérez" autocomplete="name" />
+          @if (form.controls.nombre.touched && form.controls.nombre.hasError('required')) {
+            <small class="error">El nombre es obligatorio.</small>
+          }
+          @if (form.controls.nombre.touched && form.controls.nombre.hasError('minlength')) {
+            <small class="error">El nombre debe tener al menos 3 caracteres.</small>
+          }
+        </div>
 
-    <label for="noches">Número de noches</label>
-    <input id="noches" type="number" formControlName="noches" />
-    @if (form.controls.noches.touched && form.controls.noches.hasError('required')) {
-      <small class="error">El número de noches es obligatorio.</small>
-    }
-    @if (form.controls.noches.touched && (form.controls.noches.hasError('min') || form.controls.noches.hasError('max'))) {
-      <small class="error">La reserva debe ser de 1 a 15 noches.</small>
-    }
+        <div class="campo">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" type="email" formControlName="correo" placeholder="nombre@correo.com" autocomplete="email" />
+          @if (form.controls.correo.touched && form.controls.correo.hasError('required')) {
+            <small class="error">El correo es obligatorio.</small>
+          }
+          @if (form.controls.correo.touched && form.controls.correo.hasError('email')) {
+            <small class="error">Ingrese un correo válido.</small>
+          }
+        </div>
 
-    <button type="submit" [disabled]="form.invalid">Reservar</button>
-  </form>
+        <div class="campo">
+          <label for="noches">Número de noches</label>
+          <div class="con-sufijo">
+            <input id="noches" type="number" formControlName="noches" placeholder="1" min="1" max="15" />
+            <span class="sufijo">noches</span>
+          </div>
+          @if (form.controls.noches.touched && form.controls.noches.hasError('required')) {
+            <small class="error">El número de noches es obligatorio.</small>
+          } @else if (form.controls.noches.touched && (form.controls.noches.hasError('min') || form.controls.noches.hasError('max'))) {
+            <small class="error">La reserva debe ser de 1 a 15 noches.</small>
+          } @else {
+            <small class="ayuda">Mínimo 1 y máximo 15 noches.</small>
+          }
+        </div>
 
-  @if (enviado()) {
-    <p class="exito">¡Reserva registrada correctamente!</p>
-  }
+        <button type="submit" [disabled]="form.invalid">Reservar</button>
+      </form>
+
+      @if (enviado()) {
+        <div class="exito" role="status">
+          <strong>¡Reserva registrada correctamente!</strong>
+          <span>{{ form.value.nombre }}, reservaste {{ form.value.noches }} noche(s). Enviaremos la confirmación a {{ form.value.correo }}.</span>
+        </div>
+      }
+    </div>
+  </section>
 </main>
