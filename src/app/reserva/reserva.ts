@@ -15,7 +15,7 @@ export class Reserva {
   form = this.fb.group({
     nombre: ['', [Validators.required, Validators.minLength(3)]],
     correo: ['', [Validators.required, Validators.email]],
-    noches: [null as number | null, [Validators.required, Validators.min(1), Validators.max(15)]],
+    noches: [null as number | null, [Validators.required, Validators.min(0), Validators.max(15)]],
   });
 
   enviar(): void {
