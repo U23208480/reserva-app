@@ -40,3 +40,21 @@ jobs:
           name: build-reserva-app
           path: dist/reserva-app/browser
           retention-days: 7
+
+  # ---------------- ENTREGA CONTINUA (CD) ----------------
+  cd:
+    name: CD - Despliegue a Netlify
+    needs: ci   # solo se ejecuta si el job de CI terminó correctamente
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el build generado por CI
+        uses: actions/download-artifact@v4
+        with:
+          name: build-reserva-app
+          path: build
+
+      - name: Desplegar en Netlify
+        run: npx --yes netlify-cli@27 deploy --dir=build --prod --no-build
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
