@@ -1,0 +1,42 @@
+name: CI/CD Angular - reserva-app
+
+# El workflow se ejecuta en cada push a main y en cada Pull Request hacia main
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  # ---------------- INTEGRACIÓN CONTINUA (CI) ----------------
+  ci:
+    name: CI - Pruebas y build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener el código
+        uses: actions/checkout@v4
+
+      - name: Preparar el entorno (Node.js 22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar pruebas automáticas
+        run: npm run test:ci
+
+      - name: Generar el build de producción
+        run: npm run build
+
+      - name: Guardar el build como artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reserva-app
+          path: dist/reserva-app/browser
+          retention-days: 7
