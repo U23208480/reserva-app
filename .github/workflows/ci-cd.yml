@@ -45,6 +45,8 @@ jobs:
   cd:
     name: CD - Despliegue a Netlify
     needs: ci   # solo se ejecuta si el job de CI terminó correctamente
+    # solo despliega con push a main; en un Pull Request este job se omite
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Descargar el build generado por CI
